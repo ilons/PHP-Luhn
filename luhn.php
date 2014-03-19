@@ -1,16 +1,17 @@
 <?php
 	/*
-	* Validation of Luhn numbers
+	* Check if a given number is a valid Luhn number, and if the control digit is correct
 	* 
-	* Asumes the input to be a number and the last digit to be the control digit.
+	* Asumes the input to be digits only, and last one to be the control digit.
+	* Only zeros are considered valid, and should be taken care or outside of this function.
 	*
 	* @see http://en.wikipedia.org/wiki/Luhn_algorithm
 	*/
-	public function validateLuhnNumber($value = NULL) {
-		if (is_numeric($value)) {
+	public function isLuhnNumber($digits = NULL) {
+		if (is_numeric($digits)) {
 
 			// Calculate the digits with start from the last (which is the check digit)
-			$value = strrev($value);
+			$digits = strrev($digits);
 
 			$checksum = 0;
 			$multiplier = 1;
@@ -18,8 +19,8 @@
 			// for each other digit, multiply with 1 and 2
 			// If the sum is greater than 9, substract 9
 			// Add sum to the total checksum
-			for ($index = 0; $index < strlen($value); $index++) {
-				$sum = $value[$index] * $multiplier;
+			for ($index = 0; $index < strlen($digits); $index++) {
+				$sum = $digits[$index] * $multiplier;
 
 				if ($sum > 9) {
 					$checksum += $sum - 9;
@@ -40,7 +41,7 @@
 
 				// The last digit is the control digit, substract its value from the checksum
 				// Since the number is reversed, this is the first digit
-				$controldigit = $value[0];
+				$controldigit = $digits[0];
 				$checksum -= $controldigit;
 
 				// Get next even 10-multiplier
